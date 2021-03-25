@@ -1,6 +1,9 @@
 import pandas as pd
 import numpy as np
 
+#Longitude from 0-3
+#Latitude from 0-3
+
 class Board:
 
     def __init__(self):
@@ -20,7 +23,8 @@ class Board:
             elif count >= 6 and count<= 9:
                 st = line.split()
                 (self.goalTable).append(st)
-            count += 1 
+            count += 1
+        self.curTable = self.orgTable
 
     def printBoard(self,letter):
         if letter == "o" or letter == "O":
@@ -34,8 +38,11 @@ class Board:
             print(*ele)
     
     
-    def makeMove(self):
-        continue
+    def makeMove(self, currLon,currLat,nextLon,nextLat):
+        temp = self.curTable[currLat][currLon]
+        self.curTable[currLat][currLon]= self.curTable[nextLat][nextLon]
+        self.curTable[nextLat][nextLon] = temp
+        
 
     def heuristicAlgo(self):
         continue
