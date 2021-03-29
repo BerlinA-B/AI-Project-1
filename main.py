@@ -4,10 +4,16 @@
 from boardGame import Board
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
     board = Board()
-    board.makeBoard("Sample_Input")
-    board.printBoard('o')
+    board.makeBoard("C:\\Users\\isaac\\Desktop\\AI Project 1\\AI-Project-1\\Sample_Input.txt")
+    print("...")
+    board.printBoard()
+    print(":::")
+    board.moveUp()
+    print("<<<")
+    board.printBoard()
+    print("---")
+    print(board.heuristicAlgo())
 
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
