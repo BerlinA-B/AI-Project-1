@@ -1,6 +1,3 @@
-import pandas as pd
-import numpy as np
-
 #Longitude from 0-3
 #Latitude from 0-3
 
@@ -20,7 +17,7 @@ class Board:
                 (self.orgTable).append(st)
                 
             '''up to an certain # of lines, make goal board'''
-            elif count >= 6 and count<= 9:
+            if count >= 6 and count<= 9:
                 st = line.split()
                 (self.goalTable).append(st)
             count += 1
@@ -29,7 +26,7 @@ class Board:
     def printBoard(self,letter):
         if letter == "o" or letter == "O":
             board=self.orgTable
-        elif letter == '"c" or letter == "C":
+        elif letter == "c" or letter == "C":
             board=self.curTable
         else:
             board = self.goalTable
@@ -44,7 +41,7 @@ class Board:
         self.curTable[nextLat][nextLon] = temp
         
 
-    def heuristicAlgo(self):
-        continue
+    # def heuristicAlgo(self):
+    #     continue
 
     
