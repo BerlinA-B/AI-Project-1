@@ -16,7 +16,6 @@ class Board:
         for line in open(filename, 'r'):
             '''up to an certain # of lines, make initial board'''
             if 1 <= count <= 4:
-                print(count)
                 st = line.split()
                 self.curTable.append(st)
             '''up to an certain # of lines, make goal board'''
@@ -38,51 +37,71 @@ class Board:
 
     def moveUp(self):
         if self.lat == 0:
-            raise Exception("not a valid move")
+            return False
         self.curTable[self.lat][self.lon] = self.curTable[self.lat-1][self.lon]
         self.curTable[self.lat - 1][self.lon] = "0"
+        self.lat -= 1
+        return True
 
     def moveUpRight(self):
         if self.lat == 0 or self.lon == 3:
-            raise Exception("not a valid move")
+            return False
         self.curTable[self.lat][self.lon] = self.curTable[self.lat-1][self.lon+1]
         self.curTable[self.lat - 1][self.lon+1] = "0"
+        self.lat -= 1
+        self.lon += 1
+        return True
 
     def moveRight(self):
         if self.lon == 3:
-            raise Exception("not a valid move")
+            return False
         self.curTable[self.lat][self.lon] = self.curTable[self.lat][self.lon+1]
         self.curTable[self.lat][self.lon+1] = "0"
+        self.lon += 1
+        return True
 
     def moveRightDown(self):
         if self.lat == 3 or self.lon == 3:
-            raise Exception("not a valid move")
+            return False
         self.curTable[self.lat][self.lon] = self.curTable[self.lat+1][self.lon+1]
         self.curTable[self.lat+1][self.lon+1] = "0"
+        self.lat += 1
+        self.lon += 1
+        return True
 
     def moveDown(self):
-        if self.lon == 3:
-            raise Exception("not a valid move")
+        if self.lat == 3:
+            return False
         self.curTable[self.lat][self.lon] = self.curTable[self.lat+1][self.lon]
         self.curTable[self.lat+1][self.lon] = "0"
+        self.lat += 1
+        return True
 
     def moveDownLeft(self):
         if self.lat == 3 or self.lon == 0:
-            raise Exception("not a valid move")
+            return False
         self.curTable[self.lat][self.lon] = self.curTable[self.lat+1][self.lon-1]
         self.curTable[self.lat+1][self.lon-1] = "0"
+        self.lat += 1
+        self.lon -= 1
+        return True
 
     def moveLeft(self):
         if self.lon == 0:
-            raise Exception("not a valid move")
+            return False
         self.curTable[self.lat][self.lon] = self.curTable[self.lat][self.lon-1]
         self.curTable[self.lat][self.lon-1] = "0"
+        self.lon -= 1
+        return True
 
     def moveLeftUp(self):
         if self.lat == 0 or self.lon == 0:
-            raise Exception("not a valid move")
+            return False
         self.curTable[self.lat][self.lon] = self.curTable[self.lat-1][self.lon-1]
         self.curTable[self.lat-1][self.lon-1] = "0"
+        self.lat -= 1
+        self.lon -= 1
+        return True
 
     def heuristicAlgo(self):
         totDis = 0
@@ -94,4 +113,9 @@ class Board:
                             totDis += abs(lat1-lat2) + abs(lon1-lon2)
         return totDis
 
-
+    def atGoal(self):
+        for lat in range(4):
+            for lon in range(4):
+                if not self.curTable[lat][lon] == self.goalTable[lat][lon]:
+                    return False
+        return True
