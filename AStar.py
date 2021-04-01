@@ -1,51 +1,80 @@
 from boardGame import Board
 import copy
 
+
 class AStar:
     def __init__(self, file):
         self.board = Board()
+        self.numNodes = 1
         self.board.makeBoard(file)
-        self.front = [(copy.deepcopy(self.board), 0)]
+        self.front = [(copy.deepcopy(self.board), 0, [], [self.board.heuristicAlgo()])]
+
+    ''' Runs A Star Search'''
 
     def aStar(self):
         while True:
             state = self.front.pop(0)
             curBoard = state[0]
             g = state[1]
+            temphist = state[2]
+            tempFs = state[3]
             legalMoves = []
 
-            curBoard.printBoard()
-            print("-------------")
-
             if state[0].atGoal():
+                self.writeOut(curBoard, temphist, tempFs)
                 return
             if curBoard.moveUp():
-                legalMoves.append((copy.deepcopy(curBoard), g+1))
+                hist = copy.deepcopy(temphist)
+                hist.append(3)
+                legalMoves.append((copy.deepcopy(curBoard), g + 1, hist, copy.deepcopy(tempFs)))
                 curBoard.moveDown()
+                self.numNodes += 1
             if curBoard.moveUpRight():
-                legalMoves.append((copy.deepcopy(curBoard), g+1))
+                hist = copy.deepcopy(temphist)
+                hist.append(4)
+                legalMoves.append((copy.deepcopy(curBoard), g + 1, hist, copy.deepcopy(tempFs)))
                 curBoard.moveDownLeft()
+                self.numNodes += 1
             if curBoard.moveRight():
-                legalMoves.append((copy.deepcopy(curBoard), g+1))
+                hist = copy.deepcopy(temphist)
+                hist.append(5)
+                legalMoves.append((copy.deepcopy(curBoard), g + 1, hist, copy.deepcopy(tempFs)))
                 curBoard.moveLeft()
+                self.numNodes += 1
             if curBoard.moveRightDown():
-                legalMoves.append((copy.deepcopy(curBoard), g+1))
+                hist = copy.deepcopy(temphist)
+                hist.append(6)
+                legalMoves.append((copy.deepcopy(curBoard), g + 1, hist, copy.deepcopy(tempFs)))
                 curBoard.moveLeftUp()
+                self.numNodes += 1
             if curBoard.moveDown():
-                legalMoves.append((copy.deepcopy(curBoard), g+1))
+                hist = copy.deepcopy(temphist)
+                hist.append(7)
+                legalMoves.append((copy.deepcopy(curBoard), g + 1, hist, copy.deepcopy(tempFs)))
                 curBoard.moveUp()
+                self.numNodes += 1
             if curBoard.moveDownLeft():
-                legalMoves.append((copy.deepcopy(curBoard), g+1))
+                hist = copy.deepcopy(temphist)
+                hist.append(8)
+                legalMoves.append((copy.deepcopy(curBoard), g + 1, hist, copy.deepcopy(tempFs)))
                 curBoard.moveUpRight()
+                self.numNodes += 1
             if curBoard.moveLeft():
-                legalMoves.append((copy.deepcopy(curBoard), g+1))
+                hist = copy.deepcopy(temphist)
+                hist.append(1)
+                legalMoves.append((copy.deepcopy(curBoard), g + 1, hist, copy.deepcopy(tempFs)))
                 curBoard.moveRight()
+                self.numNodes += 1
             if curBoard.moveLeftUp():
-                legalMoves.append((copy.deepcopy(curBoard), g+1))
+                hist = copy.deepcopy(temphist)
+                hist.append(2)
+                legalMoves.append((copy.deepcopy(curBoard), g + 1, hist, copy.deepcopy(tempFs)))
                 curBoard.moveRightDown()
+                self.numNodes += 1
 
             for move in legalMoves:
                 moveF = move[0].heuristicAlgo() + move[1]
+                move[3].append(moveF)
                 added = False
                 for i in range(len(self.front)):
                     frontF = self.front[i][0].heuristicAlgo() + self.front[i][1]
@@ -55,3 +84,23 @@ class AStar:
                         break
                 if not added:
                     self.front.append(move)
+
+    '''Writes output to file out.txt'''
+
+    def writeOut(self, board, hist, fs):
+        file = open("out.txt", "w")
+        startTable = board.startTable
+        goalTable = board.goalTable
+
+        for line in startTable:
+            file.write(' '.join(line))
+            file.write("\n")
+        file.write("\n")
+        for line in goalTable:
+            file.write(' '.join(line))
+            file.write("\n")
+        file.write("\n")
+        file.write(str(len(hist)) + "\n")
+        file.write(str(self.numNodes) + "\n")
+        file.write(' '.join(str(item) for item in hist) + "\n")
+        file.write(' '.join(str(item) for item in fs) + "\n")

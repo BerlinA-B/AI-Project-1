@@ -4,7 +4,7 @@
 from AStar import AStar
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    search = AStar("C:\\Users\\isaac\\Desktop\\AI Project 1\\AI-Project-1\\Sample_Input.txt")
+    search = AStar("C:\\Users\\isaac\\Desktop\\AI Project 1\\AI-Project-1\\Input1.txt")
     search.aStar()
 
 
