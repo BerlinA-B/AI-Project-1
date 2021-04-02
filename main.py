@@ -2,9 +2,10 @@
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 from AStar import AStar
+import sys
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    search = AStar("C:\\Users\\isaac\\Desktop\\AI Project 1\\AI-Project-1\\Input1.txt")
+    search = AStar(sys.argv[1])
     search.aStar()
 
 
