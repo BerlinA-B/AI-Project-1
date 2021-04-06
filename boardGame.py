@@ -141,7 +141,7 @@ class Board:
                 for lat2 in range(4):
                     for lon2 in range(4):
                         if self.curTable[lat1][lon1] == self.goalTable[lat2][lon2]:
-                            totDis += abs(lat1 - lat2) + abs(lon1 - lon2)
+                            totDis += max(abs(lat1 - lat2),  abs(lon1 - lon2))
         return totDis
 
     '''returns true if the goal is the current state. false otherwise'''
@@ -150,5 +150,14 @@ class Board:
         for lat in range(4):
             for lon in range(4):
                 if not self.curTable[lat][lon] == self.goalTable[lat][lon]:
+                    return False
+        return True
+
+    '''returns true if the other board is the same as the current state. false otherwise'''
+
+    def equals(self, other):
+        for lat in range(4):
+            for lon in range(4):
+                if not self.curTable[lat][lon] == other.curTable[lat][lon]:
                     return False
         return True

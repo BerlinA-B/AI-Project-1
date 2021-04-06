@@ -5,8 +5,8 @@ import copy
 class AStar:
     def __init__(self, file):
         self.board = Board()
-        self.numNodes = 1
         self.board.makeBoard(file)
+        self.totalTree = []
         self.front = [(copy.deepcopy(self.board), 0, [], [self.board.heuristicAlgo()])]
 
     ''' Runs A Star Search'''
@@ -20,6 +20,13 @@ class AStar:
             tempFs = state[3]
             legalMoves = []
 
+            # curBoard.printCurBoard()
+            # print()
+            # print(*temphist)
+            # print(curBoard.heuristicAlgo())
+            # print(*tempFs)
+            # print("-----")
+
             if state[0].atGoal():
                 self.writeOut(curBoard, temphist, tempFs)
                 return
@@ -28,51 +35,46 @@ class AStar:
                 hist.append(3)
                 legalMoves.append((copy.deepcopy(curBoard), g + 1, hist, copy.deepcopy(tempFs)))
                 curBoard.moveDown()
-                self.numNodes += 1
             if curBoard.moveUpRight():
                 hist = copy.deepcopy(temphist)
                 hist.append(4)
                 legalMoves.append((copy.deepcopy(curBoard), g + 1, hist, copy.deepcopy(tempFs)))
                 curBoard.moveDownLeft()
-                self.numNodes += 1
             if curBoard.moveRight():
                 hist = copy.deepcopy(temphist)
                 hist.append(5)
                 legalMoves.append((copy.deepcopy(curBoard), g + 1, hist, copy.deepcopy(tempFs)))
                 curBoard.moveLeft()
-                self.numNodes += 1
             if curBoard.moveRightDown():
                 hist = copy.deepcopy(temphist)
                 hist.append(6)
                 legalMoves.append((copy.deepcopy(curBoard), g + 1, hist, copy.deepcopy(tempFs)))
                 curBoard.moveLeftUp()
-                self.numNodes += 1
             if curBoard.moveDown():
                 hist = copy.deepcopy(temphist)
                 hist.append(7)
                 legalMoves.append((copy.deepcopy(curBoard), g + 1, hist, copy.deepcopy(tempFs)))
                 curBoard.moveUp()
-                self.numNodes += 1
             if curBoard.moveDownLeft():
                 hist = copy.deepcopy(temphist)
                 hist.append(8)
                 legalMoves.append((copy.deepcopy(curBoard), g + 1, hist, copy.deepcopy(tempFs)))
                 curBoard.moveUpRight()
-                self.numNodes += 1
             if curBoard.moveLeft():
                 hist = copy.deepcopy(temphist)
                 hist.append(1)
                 legalMoves.append((copy.deepcopy(curBoard), g + 1, hist, copy.deepcopy(tempFs)))
                 curBoard.moveRight()
-                self.numNodes += 1
             if curBoard.moveLeftUp():
                 hist = copy.deepcopy(temphist)
                 hist.append(2)
                 legalMoves.append((copy.deepcopy(curBoard), g + 1, hist, copy.deepcopy(tempFs)))
                 curBoard.moveRightDown()
-                self.numNodes += 1
 
             for move in legalMoves:
+                for hisMove in self.totalTree:
+                    if move[0].equals(hisMove):
+                        continue
                 moveF = move[0].heuristicAlgo() + move[1]
                 move[3].append(moveF)
                 added = False
@@ -80,10 +82,12 @@ class AStar:
                     frontF = self.front[i][0].heuristicAlgo() + self.front[i][1]
                     if moveF < frontF:
                         self.front.insert(i, move)
+                        self.totalTree.append(move[0])
                         added = True
                         break
                 if not added:
                     self.front.append(move)
+                    self.totalTree.append(move[0])
 
     '''Writes output to file out.txt'''
 
@@ -101,6 +105,6 @@ class AStar:
             file.write("\n")
         file.write("\n")
         file.write(str(len(hist)) + "\n")
-        file.write(str(self.numNodes) + "\n")
+        file.write(str(len(self.totalTree)) + "\n")
         file.write(' '.join(str(item) for item in hist) + "\n")
         file.write(' '.join(str(item) for item in fs) + "\n")
